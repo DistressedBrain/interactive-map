@@ -30,6 +30,8 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+html { scroll-behavior: smooth; }
+
 html, body { min-height: 100%; }
 
 body {
@@ -518,4 +520,20 @@ footer {
   .board .widget { grid-column: span 2 !important; grid-row: span 2 !important; }
   .navlinks { display: none; }
   .lang { margin-left: auto; }
+}
+
+/* ---------------- Tablet screens ---------------- */
+
+@media (min-width: 821px) and (max-width: 1100px) {
+  .board { grid-template-columns: repeat(4, 1fr); }
+  .board .widget { grid-column: span 2 !important; }
+}
+
+/* ---------------- Large screens ---------------- */
+
+@media (min-width: 1400px) {
+  .hero { max-width: 1400px; }
+  .board { max-width: 1400px; }
+  .footgrid { max-width: 1300px; }
+  .copyright { max-width: 1300px; }
 }

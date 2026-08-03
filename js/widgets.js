@@ -30,9 +30,9 @@ const WIDGETS = [
   {
     id: "topic-2",
     tag: "Plate 02",
-    title: "Topic Two",
-    subtitle: "Not yet charted",
-    link: "pages/topic-2.html",
+    title: "Coming Soon",
+    subtitle: "This territory is yet to be charted",
+    link: "#",
     media: null,
     variant: "accent",
     accent: "#4ecdc4",
@@ -41,9 +41,9 @@ const WIDGETS = [
   {
     id: "topic-3",
     tag: "Plate 03",
-    title: "Topic Three",
-    subtitle: "Not yet charted",
-    link: "pages/topic-3.html",
+    title: "Coming Soon",
+    subtitle: "This territory is yet to be charted",
+    link: "#",
     media: null,
     variant: "light",
     accent: "#e07a5f",
@@ -52,9 +52,9 @@ const WIDGETS = [
   {
     id: "topic-4",
     tag: "Plate 04",
-    title: "Topic Four",
-    subtitle: "Not yet charted",
-    link: "pages/topic-4.html",
+    title: "Coming Soon",
+    subtitle: "This territory is yet to be charted",
+    link: "#",
     media: null,
     variant: "dark",
     accent: "#7fb069",
@@ -63,9 +63,9 @@ const WIDGETS = [
   {
     id: "topic-5",
     tag: "Plate 05",
-    title: "Topic Five",
-    subtitle: "Not yet charted",
-    link: "pages/topic-5.html",
+    title: "Coming Soon",
+    subtitle: "This territory is yet to be charted",
+    link: "#",
     media: null,
     variant: "accent",
     accent: "#6aa9d4",
@@ -74,12 +74,12 @@ const WIDGETS = [
   {
     id: "topic-6",
     tag: "Plate 06",
-    title: "Global map",
-    subtitle: "The map of the world, not yet chategorized",
-      link: "pages/topic-6.html",
-      media: "https://www.gstatic.com/earth/social/00_generic_facebook-001.jpg",
+    title: "Global Map",
+    subtitle: "The map of the world, not yet categorized",
+    link: "pages/topic-6.html",
+    media: "https://www.gstatic.com/earth/social/00_generic_facebook-001.jpg",
     variant: "dark",
     accent: "#b48ead",
     cs: 2, rs: 1, r: 18
-    }
+  }
 ];

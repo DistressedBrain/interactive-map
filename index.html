@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="InteractiveMap — a personal atlas. Each plate opens a chapter of the map.">
+  <meta name="theme-color" content="#0c110f">
   <title>InteractiveMap — A Personal Atlas</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧭</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,16 +18,15 @@
   <header class="topbar">
     <a class="brand" href="index.html">Interactive<span>Map</span></a>
 
-    <!-- placeholder links — point the href="#" somewhere real later -->
     <nav class="navlinks">
-      <a href="#">Explore</a>
-      <a href="#">Gallery</a>
-      <a href="#">About</a>
+      <a href="#explore">Explore</a>
+      <a href="animations.html">Animations</a>
+      <a href="dev.html">Dev Tools</a>
     </nav>
 
     <!-- language dropdown -->
     <div class="lang" id="langDropdown">
-      <button type="button" aria-haspopup="true">
+      <button type="button" aria-haspopup="true" aria-label="Select language">
         🌐 EN
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polyline points="6 9 12 15 18 9"></polyline>
@@ -34,7 +34,7 @@
       </button>
       <div class="menu">
         <a href="#">English</a>
-        <a href="#" class="disabled">More soon…</a>
+        <a href="#" class="disabled">More languages soon…</a>
       </div>
     </div>
   </header>
@@ -68,9 +68,10 @@
            Charted slowly, plate by plate.</p>
       </div>
       <div class="col">
-        <h4>Site</h4>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
+        <h4>Navigation</h4>
+        <a href="index.html">Home</a>
+        <a href="animations.html">Animations</a>
+        <a href="dev.html">Layout Editor</a>
       </div>
       <div class="col">
         <h4>Legal</h4>

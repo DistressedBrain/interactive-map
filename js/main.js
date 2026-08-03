@@ -32,6 +32,7 @@
     a.style.gridRow = "span " + rs;
     a.style.borderRadius = r + "px";
     a.style.setProperty("--wa", w.accent);
+    a.setAttribute("aria-label", w.title + ": " + w.subtitle);
 
     let inner = "";
     if (w.media && w.media.toLowerCase().endsWith(".mp4")) {
@@ -39,11 +40,11 @@
     } else if (w.media) {
       inner += '<div class="w-media"><img src="' + w.media + '" alt="' + w.title + '"></div>';
     } else {
-      inner += '<div class="w-blob"></div><div class="w-num">' + String(i + 1).padStart(2, "0") + "</div>";
+      inner += '<div class="w-blob" aria-hidden="true"></div><div class="w-num" aria-hidden="true">' + String(i + 1).padStart(2, "0") + "</div>";
     }
 
     inner +=
-      '<div class="w-top"><span class="chip">' + (w.tag || "Topic") + '</span><span class="arrow">↗</span></div>' +
+      '<div class="w-top"><span class="chip">' + (w.tag || "Topic") + '</span><span class="arrow" aria-hidden="true">↗</span></div>' +
       '<div class="w-bottom"><h3>' + w.title + "</h3><p>" + w.subtitle + "</p></div>";
 
     a.innerHTML = inner;
@@ -57,15 +58,50 @@
   }
 })();
 
-/* language dropdown open/close */
+/* language dropdown open/close with keyboard support */
 (function () {
   const dd = document.getElementById("langDropdown");
   if (!dd) return;
-  dd.querySelector("button").addEventListener("click", function (e) {
+  
+  const button = dd.querySelector("button");
+  const menu = dd.querySelector(".menu");
+  
+  button.addEventListener("click", function (e) {
     e.stopPropagation();
     dd.classList.toggle("open");
+    button.setAttribute("aria-expanded", dd.classList.contains("open"));
   });
+  
+  // Close on outside click
   document.addEventListener("click", function () {
     dd.classList.remove("open");
+    button.setAttribute("aria-expanded", "false");
+  });
+  
+  // Close on Escape key
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && dd.classList.contains("open")) {
+      dd.classList.remove("open");
+      button.setAttribute("aria-expanded", "false");
+      button.focus();
+    }
+  });
+  
+  // Keyboard navigation within menu
+  menu.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      const items = Array.from(menu.querySelectorAll("a:not(.disabled)"));
+      const currentIndex = items.indexOf(document.activeElement);
+      let nextIndex;
+      
+      if (e.key === "ArrowDown") {
+        nextIndex = (currentIndex + 1) % items.length;
+      } else {
+        nextIndex = (currentIndex - 1 + items.length) % items.length;
+      }
+      
+      items[nextIndex].focus();
+    }
   });
 })();
