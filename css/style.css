@@ -1,0 +1,524 @@
+/* ============================================================
+   INTERACTIVE MAP — "atlas at night"
+   Dark expedition-chart theme: topographic contours, surveyor
+   grid, brass instrument accents, paper cards.
+   ============================================================ */
+
+:root {
+  --bg: #0c110f;
+  --bg-2: #121815;
+  --card-dark: #141a17;
+  --card-dark-2: #1a211d;
+  --card-light: #efe9dd;
+  --card-light-2: #e5ddcc;
+  --surface: rgba(236, 233, 223, 0.05);
+  --surface-2: rgba(236, 233, 223, 0.1);
+  --border: rgba(236, 233, 223, 0.1);
+  --text: #ece9df;
+  --text-dim: #9aa39b;
+  --ink: #1c1a15;
+  --ink-dim: #6d685c;
+  --accent: #d4a24e;   /* brass */
+  --accent-2: #e6bc74;
+  --font-display: "Sora", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", "Consolas", monospace;
+  /* strong custom easings — built-in CSS easings are too weak */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { min-height: 100%; }
+
+body {
+  /* layered chart background: glow, contour lines, surveyor crosses */
+  background:
+    radial-gradient(1100px 700px at 82% -10%, rgba(111, 174, 148, 0.08), transparent 60%),
+    radial-gradient(900px 600px at 5% 105%, rgba(212, 162, 78, 0.06), transparent 60%),
+    url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='820' height='820' viewBox='0 0 820 820'><g fill='none' stroke='%236fae94' stroke-opacity='0.08'><ellipse cx='410' cy='410' rx='90' ry='68' transform='rotate(14 410 410)'/><ellipse cx='418' cy='402' rx='140' ry='108' transform='rotate(-9 410 410)'/><ellipse cx='402' cy='418' rx='190' ry='150' transform='rotate(23 410 410)'/><ellipse cx='414' cy='408' rx='242' ry='196' transform='rotate(-16 410 410)'/><ellipse cx='406' cy='414' rx='296' ry='240' transform='rotate(8 410 410)'/><ellipse cx='412' cy='406' rx='350' ry='288' transform='rotate(-27 410 410)'/><ellipse cx='408' cy='412' rx='398' ry='336' transform='rotate(17 410 410)'/></g></svg>") no-repeat right -220px top -240px,
+    url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><path d='M10 0v20M0 10h20' stroke='%23ece9df' stroke-opacity='0.05'/></svg>") repeat,
+    var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* visible keyboard focus everywhere */
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+::selection { background: var(--accent); color: var(--bg); }
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(236, 233, 223, 0.14);
+  border-radius: 5px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(236, 233, 223, 0.24); }
+
+/* ---------------- Header / search bar ---------------- */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 28px;
+  background: rgba(12, 17, 15, 0.82);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-decoration: none;
+  color: var(--text);
+}
+.brand span { color: var(--accent); }
+
+.navlinks { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.navlinks a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 7px 12px;
+  border-radius: 8px;
+  transition: color 0.2s, background 0.2s;
+}
+.navlinks a:hover { color: var(--text); background: var(--surface-2); }
+
+/* Language dropdown */
+.lang { position: relative; }
+.lang > button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.15s ease, transform 160ms var(--ease-out);
+}
+.lang > button:hover { background: var(--surface-2); }
+.lang > button:active { transform: scale(0.97); }
+.lang .menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  min-width: 140px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 6px;
+  display: none;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  /* popovers scale in from their trigger, not from center */
+  transform-origin: top right;
+}
+.lang.open .menu { display: block; animation: menu-in 150ms var(--ease-out); }
+@keyframes menu-in {
+  from { opacity: 0; transform: scale(0.95); }
+}
+.lang .menu a {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.lang .menu a:hover { background: var(--surface-2); }
+.lang .menu a.disabled { color: var(--text-dim); cursor: default; }
+
+/* ---------------- Hero ---------------- */
+
+main { flex: 1; }
+
+.hero {
+  max-width: 1200px;
+  margin: 52px auto 0;
+  padding: 0 24px;
+}
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  animation: fade-up 0.5s var(--ease-out) backwards;
+}
+.kicker::after {
+  content: "";
+  height: 1px;
+  width: 72px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+.hero h1 {
+  margin-top: 16px;
+  max-width: 720px;
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 3.6vw, 2.9rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  animation: fade-up 0.5s var(--ease-out) 0.06s backwards;
+}
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero > p {
+  margin-top: 14px;
+  max-width: 540px;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  animation: fade-up 0.5s var(--ease-out) 0.12s backwards;
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+}
+
+/* hairline rule + index row above the grid */
+.board-head {
+  width: min(1152px, calc(100% - 48px));
+  margin: 40px auto 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* ---------------- Bento board ---------------- */
+
+.board {
+  max-width: 1200px;
+  margin: 20px auto 48px;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-auto-rows: 105px;
+  grid-auto-flow: dense;
+  gap: 14px;
+}
+
+/* ---------------- Cards ---------------- */
+
+.widget {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px 18px;
+  min-height: 0;
+  /* orchestrated entrance (overridden by looping animations below) */
+  animation: card-in 0.4s var(--ease-out) backwards;
+}
+.widget:nth-child(1) { animation-delay: 0.04s; }
+.widget:nth-child(2) { animation-delay: 0.08s; }
+.widget:nth-child(3) { animation-delay: 0.12s; }
+.widget:nth-child(4) { animation-delay: 0.16s; }
+.widget:nth-child(5) { animation-delay: 0.2s; }
+.widget:nth-child(6) { animation-delay: 0.24s; }
+.widget:nth-child(7) { animation-delay: 0.28s; }
+.widget:nth-child(8) { animation-delay: 0.32s; }
+
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+}
+
+/* variants */
+.widget.v-dark {
+  background: linear-gradient(150deg, var(--card-dark-2), var(--card-dark));
+  color: var(--text);
+  border: 1px solid var(--border);
+  /* hairline top highlight, like light catching a glass edge */
+  box-shadow: inset 0 1px 0 rgba(236, 233, 223, 0.06);
+}
+.widget.v-light {
+  background: linear-gradient(150deg, var(--card-light), var(--card-light-2));
+  color: var(--ink);
+}
+.widget.v-accent {
+  /* gradient built from the widget's own accent color (--wa) */
+  background:
+    radial-gradient(120% 120% at 85% -10%, rgba(255, 255, 255, 0.3) -20%, transparent 45%),
+    linear-gradient(155deg,
+      color-mix(in srgb, var(--wa, var(--accent)) 80%, white 20%),
+      var(--wa, var(--accent)) 55%,
+      color-mix(in srgb, var(--wa, var(--accent)) 60%, black 40%));
+  color: #fff;
+}
+
+/* decorative blob for cards without media */
+.w-blob {
+  position: absolute;
+  right: -18%;
+  bottom: -35%;
+  width: 75%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--wa, var(--accent)), transparent 65%);
+  opacity: 0.45;
+  filter: blur(6px);
+  pointer-events: none;
+}
+.widget.v-accent .w-blob {
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.7), transparent 65%);
+  opacity: 0.3;
+}
+
+/* full-bleed media (image / video) */
+.w-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.w-media img, .w-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.w-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(6, 9, 8, 0.75), rgba(6, 9, 8, 0.05) 55%);
+}
+.widget.has-media { color: #fff; }
+
+/* card top row: plate tag + arrow */
+.w-top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.chip {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(127, 127, 127, 0.16);
+  backdrop-filter: blur(4px);
+}
+.widget.v-accent .chip { background: rgba(255, 255, 255, 0.22); }
+.arrow {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  background: rgba(127, 127, 127, 0.16);
+  backdrop-filter: blur(4px);
+  transition: transform 200ms var(--ease-out), background 200ms ease;
+}
+.widget:hover .arrow {
+  transform: rotate(45deg);
+  background: var(--wa, var(--accent));
+  color: #fff;
+}
+.widget.v-accent:hover .arrow { background: #fff; color: var(--wa, var(--accent)); }
+
+/* card bottom: title + subtitle */
+.w-bottom { position: relative; z-index: 1; }
+.w-bottom h3 {
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.w-bottom p {
+  font-size: 0.76rem;
+  margin-top: 3px;
+  opacity: 0.65;
+}
+
+/* ghost plate number in the background of no-media cards */
+.w-num {
+  position: absolute;
+  z-index: 0;
+  right: 12px;
+  bottom: -14px;
+  font-family: var(--font-display);
+  font-size: 4.6rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  opacity: 0.07;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ---------------- Widget animations (chosen on animations.html) ---------------- */
+
+.anim-lift { transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out); }
+.anim-lift:hover {
+  transform: translateY(-6px) scale(1.015);
+  /* keep the hairline highlight while lifted */
+  box-shadow: inset 0 1px 0 rgba(236, 233, 223, 0.06), 0 18px 40px rgba(0, 0, 0, 0.5);
+  z-index: 5;
+}
+
+.anim-glow { transition: box-shadow 200ms ease; }
+.anim-glow:hover { box-shadow: 0 0 30px -4px var(--wa, var(--accent)); z-index: 5; }
+
+.anim-tilt { transition: transform 250ms var(--ease-out); }
+.anim-tilt:hover {
+  transform: perspective(700px) rotateX(4deg) rotateY(-5deg) scale(1.02);
+  z-index: 5;
+}
+
+.anim-shine::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -80%;
+  width: 50%; height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+  z-index: 3;
+  pointer-events: none;
+}
+.anim-shine:hover::after { left: 130%; }
+
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+/* combined with card-in so these cards still take part in the
+   page-load entrance instead of popping in abruptly */
+.anim-float { animation: card-in 0.4s var(--ease-out) backwards, floaty 5s ease-in-out infinite; }
+
+@keyframes pulse-border {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 162, 78, 0.4); }
+  70% { box-shadow: 0 0 0 12px rgba(212, 162, 78, 0); }
+}
+.anim-pulse { animation: card-in 0.4s var(--ease-out) backwards, pulse-border 2.6s ease-out infinite; }
+
+.anim-zoom .w-media img,
+.anim-zoom .w-media video,
+.anim-zoom .w-blob { transition: transform 350ms var(--ease-out); }
+.anim-zoom:hover .w-media img,
+.anim-zoom:hover .w-media video { transform: scale(1.1); }
+.anim-zoom:hover .w-blob { transform: scale(1.35); }
+
+.anim-blur { transition: filter 250ms ease; filter: grayscale(0.65) brightness(0.85); }
+.anim-blur:hover { filter: grayscale(0) brightness(1); }
+
+/* press feedback — the card confirms it heard the click.
+   Defined after the anim-* classes so it wins while pressed. */
+.widget:active { transform: scale(0.98); transition: transform 120ms var(--ease-out); }
+
+/* ---------------- Footer ---------------- */
+
+footer {
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  background: rgba(18, 24, 21, 0.7);
+  padding: 28px;
+}
+.footgrid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.footgrid .col h4 {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+.footgrid .col a {
+  display: block;
+  color: var(--text);
+  opacity: 0.8;
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 3px 0;
+}
+.footgrid .col a:hover { opacity: 1; color: var(--accent); }
+.footgrid .col.about {
+  max-width: 280px;
+}
+.footgrid .col.about p {
+  margin-top: 10px;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--text-dim);
+}
+.copyright {
+  max-width: 1100px;
+  margin: 26px auto 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+/* ---------------- Reduced motion ---------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------------- Small screens ---------------- */
+
+@media (max-width: 820px) {
+  .board { grid-template-columns: repeat(2, 1fr); }
+  .board .widget { grid-column: span 2 !important; grid-row: span 2 !important; }
+  .navlinks { display: none; }
+  .lang { margin-left: auto; }
+}
