@@ -1,40 +1,110 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0c110f">
-  <meta name="description" content="InteractiveMap — a personal atlas. Each plate opens a chapter of the map.">
-  <title>InteractiveMap — A Personal Atlas</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧭</text></svg>">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>InteractiveMap — A Curated Collection of Interactive Maps</title>
+  <meta name="description" content="InteractiveMap is a growing atlas of interactive maps. Browse themed plates — each one a self-contained map you can open and explore." />
+  <meta name="theme-color" content="#0c110f" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@400;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
-  <!-- ================= TOP BAR ================= -->
+  <!-- ===== Top bar ===== -->
   <header class="topbar">
-    <a class="brand" href="index.html">Interactive<span>Map</span></a>
+    <a href="/" class="brand">Interactive<span>Map</span></a>
 
-    <!-- placeholder links — point the href="#" somewhere real later -->
     <nav class="navlinks">
-      <a href="#">Explore</a>
-      <a href="#">Gallery</a>
-      <a href="#">About</a>
+      <a href="/">Explore</a>
+      <a href="/gallery.html">Gallery</a>
+      <a href="/about.html">About</a>
     </nav>
 
-    <!-- language dropdown -->
     <div class="lang" id="langDropdown">
       <button type="button" aria-haspopup="true" aria-expanded="false">
         🌐 EN
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
       </button>
-      <div class="menu">
-        <a href="#">English</a>
+      <div class="menu" role="menu">
+        <a href="/" role="menuitem">English</a>
+        <a href="#" role="menuitem" class="disabled" aria-disabled="true">More soon…</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Main content ===== -->
+  <main>
+
+    <!-- Hero -->
+    <section class="hero">
+      <p class="kicker">Field Atlas · Vol. I</p>
+      <h1>A curated atlas of interactive maps, <em>one plate</em> at a time.</h1>
+      <p>
+        Each plate below is a self-contained, interactive map — a chapter you can open and explore.
+        New plates are added as the collection grows.
+      </p>
+    </section>
+
+    <!-- Board header -->
+    <div class="board-head">
+      <span>Index of plates</span>
+      <span id="plateCount">—</span>
+    </div>
+
+    <!-- Bento grid (populated by JS from widgets.js) -->
+    <div class="board" id="board"></div>
+
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <div class="footgrid">
+
+      <div class="col about">
+        <h4>InteractiveMap</h4>
+        <p>
+          A curated collection of interactive maps and the stories pinned to them.
+          Built plate by plate, charted slowly.
+        </p>
+      </div>
+
+      <div class="col">
+        <h4>Site</h4>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+
+      <div class="col">
+        <h4>Legal</h4>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/imprint.html">Imprint</a>
+        <a href="/terms.html">Terms of Use</a>
+      </div>
+
+    </div>
+
+    <div class="copyright">
+      <span>© 2026 InteractiveMap</span>
+      <span>51.4778° N · 0.0015° W — drafted on the prime meridian</span>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="widgets.js"></script>
+  <script src="main.js"></script>
+
+</body>
+</html>        <a href="#">English</a>
         <a href="#" class="disabled">More soon…</a>
       </div>
     </div>
