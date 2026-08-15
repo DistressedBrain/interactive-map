@@ -1,7 +1,6 @@
 const WIDGETS = [
   {
     id: "topic-1",
-    tag: "Plate 01",
     title: "Gacha Games",
     subtitle: "Interactive maps for gacha game worlds and regions",
     link: "pages/topic-1.html",
@@ -12,7 +11,6 @@ const WIDGETS = [
   },
   {
     id: "topic-2",
-    tag: "Plate 02",
     title: "Topic Two",
     subtitle: "Coming soon — not yet charted",
     link: "pages/topic-2.html",
@@ -23,7 +21,6 @@ const WIDGETS = [
   },
   {
     id: "topic-3",
-    tag: "Plate 03",
     title: "Topic Three",
     subtitle: "Coming soon — not yet charted",
     link: "pages/topic-3.html",
@@ -34,7 +31,6 @@ const WIDGETS = [
   },
   {
     id: "topic-4",
-    tag: "Plate 04",
     title: "Topic Four",
     subtitle: "Coming soon — not yet charted",
     link: "pages/topic-4.html",
@@ -45,7 +41,6 @@ const WIDGETS = [
   },
   {
     id: "topic-5",
-    tag: "Plate 05",
     title: "Topic Five",
     subtitle: "Coming soon — not yet charted",
     link: "pages/topic-5.html",
@@ -56,7 +51,6 @@ const WIDGETS = [
   },
   {
     id: "topic-6",
-    tag: "Plate 06",
     title: "Global Map",
     subtitle: "A world overview map — not yet categorized",
     link: "pages/topic-6.html",
